@@ -1,0 +1,7 @@
+/assets/adminLTE
+/uploads
+
+# /storage/*.key
+# /.idea
+# /.vagrant
+# Homestead.json

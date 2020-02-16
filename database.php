@@ -1,11 +1,10 @@
 <?php
-// include_once('config.php');
+include_once('config.php');
 /**
  * Database connection established
  */
 class database
 {
-	private $conn;
 	
 	public function __construct()
 	{
@@ -13,7 +12,6 @@ class database
 		$username	= "root";
 		$password	= "";
 		$dbname		= "erp_php_demo";
-
 		try {
 			$this->conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,6 +19,7 @@ class database
 			$message = "Connection failed: " . $e->getMessage();
 			header('Location: '.base_url.'error.php?message='.$message);
 		}
+		// echo "<pre>"; print_r($this->conn);die;
 	}
 
 	function unique_email($value){
