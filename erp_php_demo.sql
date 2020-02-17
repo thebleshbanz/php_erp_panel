@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 16, 2020 at 06:28 PM
+-- Generation Time: Feb 17, 2020 at 08:32 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -4081,6 +4081,7 @@ CREATE TABLE `users` (
   `user_mobile` bigint(11) NOT NULL,
   `user_password` varchar(255) NOT NULL DEFAULT '',
   `user_role` varchar(255) NOT NULL DEFAULT '',
+  `user_img` varchar(250) NOT NULL DEFAULT '',
   `city` varchar(255) NOT NULL DEFAULT '',
   `address` text NOT NULL DEFAULT '',
   `pincode` int(11) NOT NULL DEFAULT 0,
@@ -4093,12 +4094,13 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_fname`, `user_lname`, `user_email`, `user_mobile`, `user_password`, `user_role`, `city`, `address`, `pincode`, `user_status`, `created_at`, `updated_at`) VALUES
-(1, 'John', 'Cena', 'john.cena@test.com', 9876540031, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'indore', 'test test test test test test test test test test test test test test test test test test test test test test test test', 452001, 1, '2020-02-02 07:38:16', '2020-02-03 20:09:31'),
-(5, 'BleshNew', 'BanzNew', 'aashish.vanjare@test.com', 98765408574, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'kochi', 'test test test test test test test test test test test test\r\ndemo demo demo demo demo demo demo demo', 752085, 1, '2020-02-02 08:04:55', '2020-02-04 04:27:51'),
-(8, 'BleshNew', 'BanzNew', 'bleshbanz@gmail.com', 9876543211, 'e10adc3949ba59abbe56e057f20f883e', 'admin', 'bengular', 'test test test test test test test test test test test test\r\ndemo demo demo demo demo demo demo demo', 852008, 1, '2020-02-03 13:47:07', '2020-02-03 16:59:46'),
-(9, 'Ashish', 'Banjare', 'ashish.vanjare@gmail.com', 9876541215, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'bengular', 'test test test test test test test test test test test test\r\ntest test test test test test test test test test test test', 12161216, 1, '2020-02-04 05:17:44', '2020-02-04 07:55:42'),
-(10, 'Ashish', 'Banjare', 'aashish.van3591@gmail.com', 9876543210, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'indore', 'test test', 452002, 1, '2020-02-14 20:14:03', '2020-02-14 20:14:03');
+INSERT INTO `users` (`user_id`, `user_fname`, `user_lname`, `user_email`, `user_mobile`, `user_password`, `user_role`, `user_img`, `city`, `address`, `pincode`, `user_status`, `created_at`, `updated_at`) VALUES
+(1, 'John', 'Cena', 'john.cena@test.com', 9876540031, 'e10adc3949ba59abbe56e057f20f883e', 'user', '', 'indore', 'test test test test test test test test test test test test test test test test test test test test test test test test', 452001, 1, '2020-02-02 07:38:16', '2020-02-03 20:09:31'),
+(5, 'BleshNew', 'BanzNew', 'aashish.vanjare@test.com', 98765408574, 'e10adc3949ba59abbe56e057f20f883e', 'user', '', 'kochi', 'test test test test test test test test test test test test\r\ndemo demo demo demo demo demo demo demo', 752085, 1, '2020-02-02 08:04:55', '2020-02-04 04:27:51'),
+(8, 'BleshNew', 'BanzNew', 'bleshbanz@gmail.com', 9876543211, 'e10adc3949ba59abbe56e057f20f883e', 'admin', '', 'bengular', 'test test test test test test test test test test test test\r\ndemo demo demo demo demo demo demo demo', 852008, 1, '2020-02-03 13:47:07', '2020-02-03 16:59:46'),
+(9, 'Ashish', 'Banz', 'ashish.banz@gmail.com', 9876540046, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'assets/uploads/user_img/1581964111.jpg', 'chennai', 'test test test test test test test test test test test test\r\ndemo demo demo demo demo demo demo demo ', 54005, 1, '2020-02-04 05:17:44', '2020-02-17 19:28:31'),
+(10, 'Ashish', 'Vanjare', 'aashish.van3591@gmail.com', 9876540049, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'assets/uploads/user_img/1581880814.jpeg', 'indore', 'test test demo demo test test demo demo test test demo demo', 452005, 0, '2020-02-14 20:14:03', '2020-02-17 20:30:39'),
+(11, 'Aadhy', 'Banz', 'aadhy.banz@gmail.com', 9876540028, 'e10adc3949ba59abbe56e057f20f883e', 'user', 'assets/uploads/user_img/1581966052.jpeg', 'indore', '285 xyz nagar, ABC road', 452005, 1, '2020-02-17 20:00:52', '2020-02-17 20:00:52');
 
 --
 -- Indexes for dumped tables
@@ -4184,7 +4186,7 @@ ALTER TABLE `offices`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

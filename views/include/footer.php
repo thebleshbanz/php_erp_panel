@@ -53,3 +53,27 @@
 <script src="<?= base_url; ?>assets/adminLTE/dist/js/demo.js"></script>
 </body>
 </html>
+<script type="text/javascript">
+$(function(){
+	$(document).on('change', '#userImg_thumb', function(){
+		alert('test change');
+	});
+});
+
+function readURL(input) {
+ 	alert('change');
+ 	// console.log(input); return falses;
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#userImg_thumb')
+                .attr('src', e.target.result)
+                .width(128)
+                .height(128);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>

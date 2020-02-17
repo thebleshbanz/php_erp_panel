@@ -17,7 +17,7 @@
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title">User Data Table</h3>
-						<button class="btn btn-info btn-xs">Add</button>
+						<a class="btn btn-info btn-xs" href="<?= base_url.'user.php?action=add' ?>" >Add</a>
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">

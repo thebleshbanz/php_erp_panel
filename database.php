@@ -19,7 +19,6 @@ class database
 			$message = "Connection failed: " . $e->getMessage();
 			header('Location: '.base_url.'error.php?message='.$message);
 		}
-		// echo "<pre>"; print_r($this->conn);die;
 	}
 
 	function unique_email($value){
@@ -69,6 +68,52 @@ class database
 		}
 	}
 
+	/*function updateData($table_name, $user_id, $post){
+		try{
+			// initialize an array with values:
+			$params = [];
+
+			// initialize a string with `fieldname` = :placeholder pairs
+			$setStr = "";
+			
+			// Post key should be updated columns name same as in table
+			foreach ($post as $key => $value) {
+				if (!empty([$key]) || $key != "" || $key != NULL){
+					$setStr .= "`$key` = :$key ,";
+				}
+			}
+			$setStr = rtrim($setStr, ",");
+			$query = "UPDATE ".$table_name." SET ".$setStr." WHERE id = ".$user_id;
+			return $this->conn->prepare($query)->execute($post);
+		}catch(PDOException $e){
+			echo "Error : ".$e->getMessage();
+		}
+	}*/
+	function updateData($table_name, $user_id, $post){
+		$allowed = [];
+		foreach($post as $key => $value){
+			// the list of allowed field names
+			$allowed[] = $key;
+		}
+		// initialize an array with values:
+		$params = [];
+
+		// initialize a string with `fieldname` = :placeholder pairs
+		$setStr = "";
+
+		// loop over source data array
+		foreach ($allowed as $key){
+		    if (isset($post[$key]) && $key != "user_id"){
+		        $setStr .= "`$key` = :$key,";
+		        $params[$key] = $post[$key];
+		    }
+		}
+		$setStr = rtrim($setStr, ",");
+
+		$params['user_id'] = $user_id;
+		$query = "UPDATE ".$table_name." SET $setStr WHERE user_id = :user_id";
+		return $this->conn->prepare($query)->execute($params);
+	}
 	/*public function getData($select = '*', $tbl_name, $where_array = NULL, $type = 'result', $order_by = NULL, $limit = NULL , $offset = NULL, $group_by = NULL){
 		$this->db->select($select);
 		$this->db->from($tbl_name);
