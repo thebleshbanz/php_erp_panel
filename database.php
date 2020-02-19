@@ -55,7 +55,6 @@ class database
 	}
 
 	function AddData($table_name , $post){
-
 		try{
 			$columnString = implode(',', array_keys($post));
 			$valueString = implode(',', array_fill(0, count($post), '?'));
@@ -64,31 +63,11 @@ class database
 			$stmt->execute(array_values($post));
 			return $this->conn->lastInsertId();
 		}catch(PDOException $e){
-			return 0;
+			echo "Error : ". $e->getMessage();
+			exit();
 		}
 	}
 
-	/*function updateData($table_name, $user_id, $post){
-		try{
-			// initialize an array with values:
-			$params = [];
-
-			// initialize a string with `fieldname` = :placeholder pairs
-			$setStr = "";
-			
-			// Post key should be updated columns name same as in table
-			foreach ($post as $key => $value) {
-				if (!empty([$key]) || $key != "" || $key != NULL){
-					$setStr .= "`$key` = :$key ,";
-				}
-			}
-			$setStr = rtrim($setStr, ",");
-			$query = "UPDATE ".$table_name." SET ".$setStr." WHERE id = ".$user_id;
-			return $this->conn->prepare($query)->execute($post);
-		}catch(PDOException $e){
-			echo "Error : ".$e->getMessage();
-		}
-	}*/
 	function updateData($table_name, $user_id, $post){
 		$allowed = [];
 		foreach($post as $key => $value){
@@ -113,6 +92,124 @@ class database
 		$params['user_id'] = $user_id;
 		$query = "UPDATE ".$table_name." SET $setStr WHERE user_id = :user_id";
 		return $this->conn->prepare($query)->execute($params);
+	}
+
+	// Country List 
+	public function getAllCountry()
+	{
+		$data = [];
+		try{
+			$sql ="SELECT * FROM com_country WHERE country_status = 1";
+			$stmt = $this->conn->prepare($sql);
+			$stmt->execute();		
+			// $result = $stmt->fetch(PDO::FETCH_ASSOC);
+			while($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+				$data[] = $row;
+			}
+			if (!empty($data)) {
+				return $data;
+			}else{
+				return false;
+			}
+		}catch(PDOException $e){
+			echo "Error : ". $e->getMessage();
+		}
+	}
+
+	// Get all State List  
+	public function getAllState()
+	{
+		try{
+			$sql ="SELECT * FROM com_state WHERE state_status = 1 AND country_id = 99";
+			$stmt = $this->conn->prepare($sql);
+			$stmt->execute();		
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if (!empty($result)) {
+				return $result;
+			}else{
+				return false;
+			}
+		}catch(PDOException $e){
+			echo "Error : ". $e->getMessage();
+		}
+	}
+
+	// Get all State List by country Id 
+	public function getStateListByCountryID($country_id)
+	{
+		$data = [];
+		try{
+			$sql ="SELECT * FROM com_state WHERE state_status = 1 AND country_id = ".$country_id;
+			$stmt = $this->conn->prepare($sql);
+			$stmt->execute();		
+			while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+				$data[] = $row;
+			}
+			if (!empty($data)) {
+				return $data;
+			}else{
+				return false;
+			}
+		}catch(PDOException $e){
+			echo "Error : ". $e->getMessage();
+		}
+	}
+
+	// Get all table data  
+	public function getTableAllValue($table_name,$column_name='')
+	{
+		$data = [];
+		if($column_name != ''){
+			$sql = "SELECT * FROM ".$table_name." WHERE ".$column_name." = '1' ";
+		}else{
+			$sql = "SELECT * FROM ".$table_name;
+		}
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+			$data[] = $row;
+		}
+		return $data;
+	}
+	
+	// Get table data by ID  
+	public function getTableValue($table_name,$column_name,$value)
+	{
+		$sql = "SELECT * FROM ".$table_name." WHERE ".$column_name." = '".$value."' ";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_OBJ);
+		return $row;
+	}
+
+	public function deleteData($table_name = '' , $where_array = ''){
+		// always initialize a variable before use!
+		$conditions = [];
+		$parameters = [];
+
+		// conditional statements
+		foreach( $where_array as $key => $value ){
+
+			if (!empty($value))
+			{
+			    // here we are using not equality
+			    $conditions[] = $key;
+			    $parameters[] = $value;
+			}
+		}
+		// the main query
+		$sql = "DELETE FROM customers";
+
+		// a smart code to add all conditions, if any
+		if ($conditions)
+		{
+		    $sql .= " WHERE ".implode(" AND ", $conditions);
+		}
+		// the usual prepare/execute/fetch routine
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute($parameters);
+		return true;
+
 	}
 	/*public function getData($select = '*', $tbl_name, $where_array = NULL, $type = 'result', $order_by = NULL, $limit = NULL , $offset = NULL, $group_by = NULL){
 		$this->db->select($select);
@@ -165,59 +262,6 @@ class database
 		return $query->{$type}();
 	}
 
-	public function deleteData($table_name = '' , $where_array = ''){
-		$this->db->delete($table_name,$where_array);		
-		return true;
-	}
-
-	public function updateData($table_name , $where_array , $post){
-		$this->db->where($where_array);
-		$this->db->update($table_name, $post);
-		return true;
-	}
-
-	// Country List 
-	public function getAllCountry()
-	{
-		$this->db->select('*');
-		$this->db->from('com_country');
-		$this->db->where('country_status', '1');
-		$query = $this->db->get();
-		return $query->result() ;
-	}
-
-	// Get all State List  
-	public function getAllState()
-	{
-		$this->db->select('*');
-		$this->db->from('com_state');
-		$this->db->where('state_status', '1');
-		$this->db->where('country_id', '99');
-		$query = $this->db->get();
-		return $query->result() ;
-	}
-
-	// Get all State List by country Id 
-	public function getStateListByCountryID($country_id)
-	{
-		$this->db->select('*');
-		$this->db->from('com_state');
-		$this->db->where('state_status', '1');
-		$this->db->where('country_id', $country_id);
-		$query = $this->db->get();
-		return $query->result() ;
-	}
-
-	// Get table data by ID  
-	public function getTableValue($table_name,$column_name,$value)
-	{
-		$this->db->select('*');
-		$this->db->from($table_name);
-		$this->db->where($column_name, $value);
-		$query = $this->db->get();
-		return $query->row() ;
-	}
-
 	// Get table data by ID with status=1 
 	public function getTableValueWithStatus($table_name, $column_name1, $column_name2, $value1, $value2)
 	{
@@ -250,15 +294,7 @@ class database
 		return $query->result() ;
 	}
 
-	// Get all table data  
-	public function getTableAllValue($table_name,$column_name)
-	{
-		$this->db->select('*');
-		$this->db->from($table_name);
-		$this->db->where($column_name, '1');
-		$query = $this->db->get();
-		return $query->result() ;
-	} */
+	 */
 }
 
 $db = new database();

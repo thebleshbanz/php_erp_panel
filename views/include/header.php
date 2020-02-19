@@ -29,6 +29,8 @@
 		<link rel="stylesheet" href="<?= base_url; ?>assets/adminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 		<!-- bootstrap wysihtml5 - text editor -->
 		<link rel="stylesheet" href="<?= base_url; ?>assets/adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+		<!-- Select2 -->
+  		<link rel="stylesheet" href="<?= base_url; ?>assets/adminLTE/bower_components/select2/dist/css/select2.min.css">
 		<!-- jQuery 3 -->
 		<script src="<?= base_url; ?>assets/adminLTE/bower_components/jquery/dist/jquery.min.js"></script>
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

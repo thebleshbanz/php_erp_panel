@@ -51,13 +51,39 @@
 <script src="<?= base_url; ?>assets/adminLTE/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?= base_url; ?>assets/adminLTE/dist/js/demo.js"></script>
+<!-- Select2 -->
+<script src="<?= base_url; ?>assets/adminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 </body>
 </html>
 <script type="text/javascript">
 $(function(){
-	$(document).on('change', '#userImg_thumb', function(){
-		alert('test change');
-	});
+	//Initialize Select2 Elements
+    $('.select2').select2()
+
+    $(document).on('change', '#country', function(){
+    	if($(this).val() != ''){
+    		$('#state_id').html("<option value=''>No State Selected</option>");
+    		var country_id = $(this).val();
+    		$.ajax({
+    			url : base_url+'ajax/server.php',
+    			type : 'post',
+    			data : {'country_id':country_id, 'action': 'onChangeCountry'},
+    			success : function(response){
+    				var obj = JSON.parse(response);
+    				if(obj.status){
+    					var state_list = obj.res;
+    					var html = '';
+    					state_list.forEach(function(item, index){
+    						// console.log('state_name -'+item.state_name+', index -'+index);
+    						html = html+`<option value="`+item.state_id+`">`+item.state_name+`</option>`;
+    					});
+    					$('#state_id').append(html);
+    				}
+    			}
+    		});
+    	}
+    });
+
 });
 
 function readURL(input) {
