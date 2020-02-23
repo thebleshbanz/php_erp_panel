@@ -156,11 +156,11 @@ class database
 	}
 
 	// Get all table data  
-	public function getTableAllValue($table_name,$column_name='')
+	public function getTableAllValue($table_name,$column_name='', $value='')
 	{
 		$data = [];
 		if($column_name != ''){
-			$sql = "SELECT * FROM ".$table_name." WHERE ".$column_name." = '1' ";
+			$sql = "SELECT * FROM ".$table_name." WHERE ".$column_name." = '".$value."'";
 		}else{
 			$sql = "SELECT * FROM ".$table_name;
 		}
@@ -198,7 +198,7 @@ class database
 			}
 		}
 		// the main query
-		$sql = "DELETE FROM customers";
+		$sql = "DELETE FROM ".$table_name;
 
 		// a smart code to add all conditions, if any
 		if ($conditions)
@@ -211,25 +211,69 @@ class database
 		return true;
 
 	}
-	/*public function getData($select = '*', $tbl_name, $where_array = NULL, $type = 'result', $order_by = NULL, $limit = NULL , $offset = NULL, $group_by = NULL){
-		$this->db->select($select);
-		$this->db->from($tbl_name);
-		//$where_array Exp. array('id' => 1)
-		if($where_array != NULL)
-			$this->db->where($where_array);
-		//$order_by Exp. 'id DESC'
-		if($order_by != NULL)
-			$this->db->order_by($order_by);		
-		//Exp. $limit = 10 , $offset = 0
+
+	public function getData($select = '*', $tbl_name, $where_array, $type = 'PDO::FETCH_ASSOC', $order_by = NULL, $limit = NULL , $offset = NULL, $group_by = NULL){
+		// echo "<pre>";print_r($where_array);die;
+		// always initialize a variable before use!
+		$conditions = [];
+		$parameters = [];
+
+		// conditional statements
+		if($where_array != NULL){
+			foreach( $where_array as $key => $value ){
+				if (!empty($value)){
+				    // here we are using not equality
+				    $conditions[] = $key;
+				    $parameters[] = $value;
+				}
+			}
+		}
+
+		// the main query
+		$sql = "SELECT ".$select." FROM ".$tbl_name;
+
+		// a smart code to add all conditions, if any
+		if ($conditions)
+		{
+		    $sql .= " WHERE ".implode(" AND ", $conditions);
+		}
+
+		if($order_by != NULL){
+			$sql .= " ORDER BY ".$order_by;
+		}
+
 		if($limit != NULL && $offset != NULL)
-			$this->db->limit($limit,$offset);		
-		//Exp. $limit = 10
-		if($limit != NULL)
-			$this->db->limit($limit);
-		$query = $this->db->get();
-		// echo $this->db->last_query();die;
-		return $query->{$type}();
+			$sql .= " LIMIT ".$limit." OFFSET ".$offset;
+
+		echo $sql;die;
+		// the usual prepare/execute/fetch routine
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute($parameters);
+		if($type == 'PDO::FETCH_OBJ'){
+			$row = $stmt->fetch(PDO::FETCH_OBJ);
+			return $row;
+			exit();
+		}else if($type == 'PDO::FETCH_ASSOC'){
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$data[] = $row;
+			}
+			return $data;
+		}
+		
 	}
+
+
+	function getReportToData($jobTitle){
+		$data = [];
+		$sql = "SELECT * FROM employees WHERE jobTitle NOT LIKE '%".$jobTitle."%' ";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while($row = $stmt->fetch(PDO::FETCH_OBJ) ){
+			$data[] = $row;
+		}
+		return $data;
+	}	
+	/*
 
 	public function getDataV2($select = '*', $tbl_name, $join_array = NULL, $where_array = NULL, $type = 'result', $order_by = NULL, $limit = NULL , $offset = NULL, $group_by = NULL){
 		

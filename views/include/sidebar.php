@@ -20,6 +20,16 @@
 					<i class="fa fa-users"></i> <span>Customer</span>
 				</a>
 			</li>
+			<li class="">
+				<a href="<?= base_url; ?>employee.php">
+					<i class="fa fa-users"></i> <span>Employee</span>
+				</a>
+			</li>
+			<li class="">
+				<a href="<?= base_url; ?>office.php">
+					<i class="fa fa-users"></i> <span>Offices</span>
+				</a>
+			</li>
 		</ul>
 	</section>
 	<!-- /.sidebar -->
