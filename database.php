@@ -10,7 +10,7 @@ class database
 	{
 		$host		= "localhost";
 		$username	= "root";
-		$password	= "";
+		$password	= "root";
 		$dbname		= "erp_php_demo";
 		try {
 			$this->conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -186,29 +186,31 @@ class database
 		// always initialize a variable before use!
 		$conditions = [];
 		$parameters = [];
+		if(!empty($where_array)){
+			// conditional statements
+			foreach( $where_array as $key => $value ){
 
-		// conditional statements
-		foreach( $where_array as $key => $value ){
-
-			if (!empty($value))
-			{
-			    // here we are using not equality
-			    $conditions[] = $key;
-			    $parameters[] = $value;
+				if (!empty($value))
+				{
+				    // here we are using not equality
+				    $conditions[] = $key;
+				    $parameters[] = $value;
+				}
 			}
+			// the main query
+			$sql = "DELETE FROM ".$table_name;
+			// a smart code to add all conditions, if any
+			if (!empty($conditions))
+			{
+			    $sql .= " WHERE ".implode(" AND ", $conditions)." = ?";
+			}
+			// the usual prepare/execute/fetch routine
+			$stmt = $this->conn->prepare($sql);
+			$stmt->execute($parameters);
+			return true;
+		}else{
+			return false;
 		}
-		// the main query
-		$sql = "DELETE FROM ".$table_name;
-
-		// a smart code to add all conditions, if any
-		if ($conditions)
-		{
-		    $sql .= " WHERE ".implode(" AND ", $conditions);
-		}
-		// the usual prepare/execute/fetch routine
-		$stmt = $this->conn->prepare($sql);
-		$stmt->execute($parameters);
-		return true;
 
 	}
 

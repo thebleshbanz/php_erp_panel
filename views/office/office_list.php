@@ -63,7 +63,6 @@
 										<td><?= $office->postalCode; ?></td>
 										<td><?= $office->territory; ?></td>
 										<td><a style="color:blue;" href="javascript:;" class="viewOffice" data-officecode="<?= $office->officeCode; ?>">View</a> | 
-											<a style="color:green;" href="javascript:;" class="EditOffice" data-officecode="<?= $office->officeCode; ?>">Edit</a> | 
 											<a style="color:red;" href="javascript:;" class="deleteOffice" data-officecode="<?= $office->officeCode; ?>">Delete</a>
 										</td>
 									</tr>
@@ -95,7 +94,7 @@
 			$("#addOfficeModal").modal({backdrop: false});
 		});
 		
-		$('a[data-officecode]').click(function(){
+		$('.viewOffice').click(function(){
 			$("#viewOfficeModal").modal({backdrop: false});
 			// console.log($(this).data('officecode'));
 			var officeCode = $(this).data('officecode');
@@ -144,7 +143,24 @@
 			}
 		});
 		
-		// table.ajax.reload();
+		$('.deleteOffice').on('click', function(){
+			var officeCode = $(this).data('officecode');
+			$.ajax({
+				type : 'POST',
+				url : base_url+'ajax/server.php',
+				data : {'action' : 'onClickOfficeDelete', 'officeCode' : officeCode},
+				success : function(res){
+					var del_obj = JSON.parse(res); // conver json string into object
+					if(del_obj.status == 1){
+						alert('Office Delete Successfuly');
+						Location.reload();
+					}else{
+						alert('please try again');
+						Location.reload();
+					}
+				}
+			});
+		});
 
 	});
 </script>
@@ -279,7 +295,7 @@
 				<h4 class="modal-title">View Office</h4>
 			</div>
 			<div class="modal-body">
-				<form class="form-horizontal" id="addOfficeForm" name="addOfficeForm" >
+				<form class="form-horizontal" id="viewOfficeForm" name="viewOfficeForm" >
 					<div class="row">
 						<div class="col-md-12">
 							

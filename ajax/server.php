@@ -48,4 +48,15 @@ if(!empty($_POST)){
 			echo json_encode(array('status'=>0));
 		}
 	}
+
+	if(isset($_POST['action']) && $_POST['action'] == 'onClickOfficeDelete'){
+		if(isset($_POST['officeCode']) && is_numeric($_POST['officeCode']) ){
+			$res = $db->deleteData('offices' , array('officeCode' => $_POST['officeCode']));
+			if(!empty($res)){
+				echo json_encode(array('status'=>1));
+			}else{
+				echo json_encode(array('status'=>0));
+			}
+		}
+	}
 }
