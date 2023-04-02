@@ -1,6 +1,6 @@
 /assets/adminLTE
 /uploads
-
+/config.php
 # /storage/*.key
 # /.idea
 # /.vagrant
