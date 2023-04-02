@@ -1,0 +1,17 @@
+{
+    "name": "ashish/php_erp_panel",
+    "authors": [
+        {
+            "name": "thebleshbanz",
+            "email": "bleshbanz@gmail.com"
+        }
+    ],
+    "require": {
+        "phpro/grumphp": "^1.13"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
+    }
+}
