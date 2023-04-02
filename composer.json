@@ -1,0 +1,12 @@
+{
+    "name": "vendor/myproject",
+    "description": "How to use Composer in PHP",
+    "authors": [
+        {
+            "name": "Blesh Banz",
+            "email": "bleshbanz@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": { }
+}
